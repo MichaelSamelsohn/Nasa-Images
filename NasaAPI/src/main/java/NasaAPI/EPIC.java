@@ -6,19 +6,24 @@ import com.mashape.unirest.http.Unirest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 public class EPIC {
 
-    private static final String EPIC_BASE_URL = "https://epic.gsfc.nasa.gov/";
-    private static final int NUMBER_OF_PHOTOS_TO_COLLECT = 4;
+    static final Logger log = LogManager.getLogger(EPIC.class.getName());
 
-    static int getNasaEpicImage() {
+    private static final String EPIC_BASE_URL = "https://epic.gsfc.nasa.gov/";
+    private static final int NUMBER_OF_PHOTOS_TO_COLLECT = 1;
+
+    public static int getNasaEpicImage() {
         String[] url = getNasaEpicImagesUrl();
         for (int i = 0; i < url.length; i++) {
             if (url[i] != null) {
                 String[] commands = {
                         "cd",
                         // TODO: Use relative path, not full one.
-                        "cd /Users/michaelsamelsohn/IdeaProjects/NasaImages/Nasa/src/main/resources/NasaEpicImages/",
+                        "cd /Users/michaelsamelsohn/IdeaProjects/Nasa-Images/NasaAPI/src/main/resources/NasaEpicImages/",
                         "curl -o EPIC_" + i + ".png " + url[i]};
                 Terminal.runCMD(commands);
             } else {

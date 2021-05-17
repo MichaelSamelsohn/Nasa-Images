@@ -3,12 +3,16 @@ package NasaAPI;
 import CMD.Terminal;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 
 public class MarsRovers {
+
+    static final Logger log = LogManager.getLogger(MarsRovers.class.getName());
 
     private static final int NUMBER_OF_PHOTOS_TO_COLLECT = 4;
     private static final String MARS_ROVER_PHOTOS_BASE_URL = "https://api.nasa.gov/mars-photos/api/v1/";

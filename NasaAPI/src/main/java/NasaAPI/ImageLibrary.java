@@ -3,10 +3,14 @@ package NasaAPI;
 import CMD.Terminal;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ImageLibrary {
+
+    static final Logger log = LogManager.getLogger(ImageLibrary.class.getName());
 
     private static final int NUMBER_OF_PHOTOS_TO_COLLECT = 4;
     private static final String NASA_LIBRARY_BASE_URL = "https://images-api.nasa.gov/search?";
