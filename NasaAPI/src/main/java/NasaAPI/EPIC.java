@@ -16,8 +16,9 @@ public class EPIC {
     private static final String EPIC_BASE_URL = "https://epic.gsfc.nasa.gov/";
     private static final int NUMBER_OF_PHOTOS_TO_COLLECT = 1;
 
-    public static int getNasaEpicImage() {
+    public static int downloadEpicImages() {
         String[] url = getNasaEpicImagesUrl();
+
         for (int i = 0; i < url.length; i++) {
             if (url[i] != null) {
                 String[] commands = {

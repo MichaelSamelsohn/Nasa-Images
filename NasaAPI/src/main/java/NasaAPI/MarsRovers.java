@@ -68,14 +68,18 @@ public class MarsRovers {
         return photosUrl;
     }
 
-    private static HashMap<Object, Object> getMarsRoverManifest(String rover) {
+    protected static HashMap<Object, Object> getMarsRoverManifest(String rover) {
         String urlComplement = "manifests/" + rover + "?" + API_KEY;
+        log.debug("The URL complement is - {}", urlComplement);
         HttpResponse<String> response = null;
         HashMap<Object, Object> roverMap = new HashMap<Object, Object>();
+
         try {
             response = Unirest.get(MARS_ROVER_PHOTOS_BASE_URL + urlComplement).
                     asString();
+            log.debug("The response is - {}", response.getBody());
 
+            log.debug("Extracting all the relevant information");
             JSONObject jsonManifest = new JSONObject(response.getBody());
             JSONObject jsonPhotoManifest = jsonManifest.getJSONObject("photo_manifest");
             String landingDate = jsonPhotoManifest.getString("landing_date");
@@ -84,6 +88,7 @@ public class MarsRovers {
             String status = jsonPhotoManifest.getString("status");
             int totalPhotos = jsonPhotoManifest.getInt("total_photos");
 
+            log.debug("Storing all the relevant information");
             roverMap.put("roverName", rover);
             roverMap.put("landingDate", landingDate);
             roverMap.put("maxDate", maxDate);
