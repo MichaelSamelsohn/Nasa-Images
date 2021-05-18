@@ -10,6 +10,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import static NasaAPI.Common.downloadImages;
+
 public class MarsRovers {
 
     static final Logger log = LogManager.getLogger(MarsRovers.class.getName());
@@ -18,23 +20,11 @@ public class MarsRovers {
     private static final String MARS_ROVER_PHOTOS_BASE_URL = "https://api.nasa.gov/mars-photos/api/v1/";
     private static final String API_KEY = "api_key=fymalkzvEUpMBhhBIpi39IQu0zqsjMy7K2AYhiwJ";
 
-    static int getMarsRoverImages(String rover, boolean sol, String date) {
+    static void getMarsRoverImages(String rover, boolean sol, String date, String imagePath) {
         HashMap<Object, Object> obj = getMarsRoverManifest(rover);
-        String[] photos = getMarsRoverImagesUrl(obj, sol, date);
+        String[] url = getMarsRoverImagesUrl(obj, sol, date);
 
-        for (int i = 0; i < photos.length; i++) {
-            if (photos[i] != null) {
-                String[] commands = {
-                        "cd",
-                        "cd /Users/michaelsamelsohn/IdeaProjects/NasaImages/Nasa/src/main/resources/MarsRoverImages/",
-                        "wget -O MARS_" + i + ".JPG " + photos[i]};
-                Terminal.runCMD(commands);
-            } else {
-                break;
-            }
-        }
-
-        return photos.length;
+        downloadImages(url,"wget -O", "MARS_", ".JPG", imagePath);
     }
 
     private static String[] getMarsRoverImagesUrl(HashMap<Object, Object> photoManifest, boolean sol, String date) {
@@ -77,7 +67,7 @@ public class MarsRovers {
         try {
             response = Unirest.get(MARS_ROVER_PHOTOS_BASE_URL + urlComplement).
                     asString();
-            log.debug("The response is - {}", response.getBody());
+            log.trace("The response is - {}", response.getBody());
 
             log.debug("Extracting all the relevant information");
             JSONObject jsonManifest = new JSONObject(response.getBody());

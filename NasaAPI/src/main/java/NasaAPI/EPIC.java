@@ -9,30 +9,19 @@ import org.json.JSONObject;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import static NasaAPI.Common.downloadImages;
+
 public class EPIC {
 
     static final Logger log = LogManager.getLogger(EPIC.class.getName());
 
     private static final String EPIC_BASE_URL = "https://epic.gsfc.nasa.gov/";
-    private static final int NUMBER_OF_PHOTOS_TO_COLLECT = 1;
+    private static final int NUMBER_OF_PHOTOS_TO_COLLECT = 4;
 
-    public static int downloadEpicImages() {
+    public static void downloadEpicImages(String imagePath) {
         String[] url = getNasaEpicImagesUrl();
 
-        for (int i = 0; i < url.length; i++) {
-            if (url[i] != null) {
-                String[] commands = {
-                        "cd",
-                        // TODO: Use relative path, not full one.
-                        "cd /Users/michaelsamelsohn/IdeaProjects/Nasa-Images/NasaAPI/src/main/resources/NasaEpicImages/",
-                        "curl -o EPIC_" + i + ".png " + url[i]};
-                Terminal.runCMD(commands);
-            } else {
-                break;
-            }
-        }
-
-        return url.length;
+        downloadImages(url,"curl -o", "EPIC_", ".png", imagePath);
     }
 
     private static String[] getNasaEpicImagesUrl() {

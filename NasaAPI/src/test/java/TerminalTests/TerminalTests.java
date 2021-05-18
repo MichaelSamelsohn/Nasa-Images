@@ -6,19 +6,17 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestRule;
 import org.junit.rules.Timeout;
 
 import java.io.File;
-import java.io.IOException;
 
 import static org.junit.Assert.*;
 
-public class RunTerminalCommands extends Terminal {
+public class TerminalTests extends Terminal {
 
-    static final Logger log = LogManager.getLogger(RunTerminalCommands.class.getName());
+    static final Logger log = LogManager.getLogger(TerminalTests.class.getName());
 
     @Rule
     public final TestRule globalTimeout = Timeout.seconds(1);
