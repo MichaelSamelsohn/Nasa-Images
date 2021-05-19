@@ -31,9 +31,14 @@ public class Common {
         }
     }
 
-    public static String formatStringWithSpace(String[] strings, @NotNull String separator) {
+    public static String formatStringWithSeparator(String[] strings, String separator) {
         log.debug("Selected separator is - {}", separator);
         log.debug("Number of strings provided is - {}", strings.length);
+
+        if (separator == null) {
+            log.warn("No separator was chosen. Will use default white space separator");
+            formatStringWithSeparator(strings, "");
+        }
 
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < strings.length; i++) {
@@ -48,5 +53,12 @@ public class Common {
         log.debug("Post formatting string is - {}", postFormatting);
 
         return postFormatting;
+    }
+
+    public static int validateNumberInInterval(int min, int max, int value) {
+        // If value is <min, then make it min.
+        // If value is >max, then make it max.
+        // If value is between min and max, then it won't be affected and returned as is.
+        return Math.min(Math.max(value, min), max);
     }
 }

@@ -18,33 +18,29 @@ public class TerminalTests extends Terminal {
 
     static final Logger log = LogManager.getLogger(TerminalTests.class.getName());
 
+    private final String THROWN_EXCEPTION_ERROR_MESSAGE = "The thrown exception message doesn't match intended one";
+
     @Rule
     public final TestRule globalTimeout = Timeout.seconds(1);
 
     @Rule
     public final TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    @Test(expected = IllegalArgumentException.class)
-    public void throwsIllegalArgumentExceptionIfCommandIsNull() {
-        log.debug("Asserting that an IllegalArgumentException is thrown when commands parameter is null");
-        runCMD(null);
-    }
-
     @Test
-    public void throwsRuntimeExceptionIfCommandIsBad() {
+    public void throwsIllegalArgumentExceptionIfCommandIsBad() {
         log.debug("Asserting that a RuntimeException is thrown when using bad commands");
-        RuntimeException exception = assertThrows(
-                RuntimeException.class,
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
                 () -> { runCMD(new String[]{"noSuchCommand"});
                 });
 
         log.debug("Asserting that the thrown exception message is as expected");
-        assertEquals("The thrown exception message doesn't match intended one (regarding non-existing commands)",
+        assertEquals(THROWN_EXCEPTION_ERROR_MESSAGE,
                 "One or more of the provided commands does not exist", exception.getMessage());
     }
 
     @Test
-    public void testMakeDirectoryCommandWorksCorrectly() {
+    public void mkdirCommandWorksCorrectly() {
         String tempFolderPath = temporaryFolder.getRoot().getAbsolutePath();
         log.debug("path of the temporary folder is - {}", tempFolderPath);
 

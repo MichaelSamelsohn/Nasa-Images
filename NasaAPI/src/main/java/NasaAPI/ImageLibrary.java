@@ -1,6 +1,5 @@
 package NasaAPI;
 
-import CMD.Terminal;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import org.apache.logging.log4j.LogManager;
@@ -9,7 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import static NasaAPI.Common.downloadImages;
-import static NasaAPI.Common.formatStringWithSpace;
+import static NasaAPI.Common.formatStringWithSeparator;
 
 public class ImageLibrary {
 
@@ -30,10 +29,10 @@ public class ImageLibrary {
         log.debug("The end year is - {}", endYear);
 
         String[] photosUrl = new String[NUMBER_OF_PHOTOS_TO_COLLECT];
-        String urlComplement = "q=" + formatStringWithSpace(q, "%20");
+        String urlComplement = "q=" + formatStringWithSeparator(q, "%20");
         log.debug("The URL complement before media type handling is - {}", urlComplement);
         if (mediaType != null) {
-            urlComplement += "&" + "media_type=" + formatStringWithSpace(mediaType, ",");
+            urlComplement += "&" + "media_type=" + formatStringWithSeparator(mediaType, ",");
         }
         urlComplement += "&" + "year_start=" + startYear + "&" + "year_end=" + endYear;
         log.debug("The URL complement after media type handling is - {}", urlComplement);

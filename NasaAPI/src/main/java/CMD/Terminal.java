@@ -40,11 +40,12 @@ public class Terminal {
                     break;
                 }
                 if (line.contains("command not found")) {
-                    throw new RuntimeException("One or more of the provided commands does not exist");
+                    throw new IllegalArgumentException("One or more of the provided commands does not exist");
                 }
             }
         } catch (IOException e) {
             log.error("Bad commands were given", e);
         }
+        log.debug("Finished running the terminal for the given commands");
     }
 }

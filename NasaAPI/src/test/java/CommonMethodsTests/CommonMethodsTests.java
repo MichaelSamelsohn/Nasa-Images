@@ -1,4 +1,4 @@
-package CommonTests;
+package CommonMethodsTests;
 
 import NasaAPI.Common;
 import org.apache.logging.log4j.LogManager;
@@ -14,6 +14,8 @@ public class CommonMethodsTests extends Common {
 
     static final Logger log = LogManager.getLogger(CommonMethodsTests.class.getName());
 
+    private final String VALIDATE_NUMBER_IN_INTERVAL_ERROR_MESSAGE = "The returned value wasn't processed properly";
+
     @Rule
     public final TemporaryFolder temporaryFolder = new TemporaryFolder();
 
@@ -24,15 +26,8 @@ public class CommonMethodsTests extends Common {
             "http://mars.jpl.nasa.gov/msl-raw-images/msss/00136/mcam/0136MR0827008000E1_DXXX.jpg"
     };
 
-    @Test(expected = IllegalArgumentException.class)
-    public void throwsIllegalArgumentExceptionIfUrlArrayIsNull() {
-        log.debug("Asserting that an IllegalArgumentException is thrown when url parameter is null");
-        downloadImages(null, "curl -o", "EPIC_", ".png",
-                temporaryFolder.getRoot().getAbsolutePath());
-    }
-
     @Test
-    public void testImagesAreDownloadedWithCorrectFormatAndPath() {
+    public void imagesAreDownloadedWithCorrectFormatAndPath() {
         String tempFolderPath = temporaryFolder.getRoot().getAbsolutePath();
         log.debug("path of the temporary folder is - {}", tempFolderPath);
 
@@ -52,14 +47,8 @@ public class CommonMethodsTests extends Common {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void throwsIllegalArgumentExceptionIfSeparatorIsNull() {
-        log.debug("Asserting that an IllegalArgumentException is thrown when separator parameter is null");
-        formatStringWithSpace(new String[]{}, null);
-    }
-
     @Test
-    public void testCorrectFormattingOfStrings() {
+    public void correctFormattingOfStrings() {
         String[] strings = new String[] {
                 "THIS",
                 "IS",
@@ -70,6 +59,21 @@ public class CommonMethodsTests extends Common {
 
         log.debug("Asserting that the formatting is performed correctly");
         Assert.assertEquals("The formatting didn't work as expected",
-                "THIS IS A TEST", formatStringWithSpace(strings, separator));
+                "THIS IS A TEST", formatStringWithSeparator(strings, separator));
+    }
+
+    @Test
+    public void validateNumberInIntervalOverMax() {
+        Assert.assertEquals(VALIDATE_NUMBER_IN_INTERVAL_ERROR_MESSAGE, 10, validateNumberInInterval(0, 10, 20));
+    }
+
+    @Test
+    public void validateNumberInIntervalBelowMin() {
+        Assert.assertEquals(VALIDATE_NUMBER_IN_INTERVAL_ERROR_MESSAGE, 0, validateNumberInInterval(0, 10, -20));
+    }
+
+    @Test
+    public void validateNumberInIntervalBetweenMinMax() {
+        Assert.assertEquals(VALIDATE_NUMBER_IN_INTERVAL_ERROR_MESSAGE, 5, validateNumberInInterval(0, 10, 5));
     }
 }
