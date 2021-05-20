@@ -26,6 +26,8 @@ public class EPIC extends Common {
         numberOfPhotosToCollect = numberOfImagesToDownload(numOfImages);
 
         downloadImages(getNasaEpicImagesUrl(),"curl -o", "EPIC_", ".png", imagePath);
+
+        log.info("For full API documentation - https://epic.gsfc.nasa.gov/about/api");
     }
 
     private String[] getNasaEpicImagesUrl() {

@@ -5,6 +5,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 public class Common extends Terminal{
 
     static final Logger log = LogManager.getLogger(Common.class.getName());
@@ -69,5 +74,10 @@ public class Common extends Terminal{
         // If value is >max, then make it max.
         // If value is between min and max, then it won't be affected and returned as is.
         return Math.min(Math.max(value, min), max);
+    }
+
+    public String readFile(String path, Charset encoding) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, encoding);
     }
 }

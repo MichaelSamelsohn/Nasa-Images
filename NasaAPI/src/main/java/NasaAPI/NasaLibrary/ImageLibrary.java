@@ -20,6 +20,8 @@ public class ImageLibrary extends Common {
         String[] url = getNasaLibraryDataUrl(q, mediaType, startYear, endYear);
 
         downloadImages(url,"wget -O", "NASA_", ".JPG", imagePath);
+
+        log.info("For full API documentation - https://images.nasa.gov/docs/images.nasa.gov_api_docs.pdf");
     }
 
     private String[] getNasaLibraryDataUrl(String[] q, String[] mediaType, String startYear, String endYear) {

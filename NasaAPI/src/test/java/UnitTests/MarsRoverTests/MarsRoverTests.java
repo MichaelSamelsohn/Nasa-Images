@@ -126,9 +126,4 @@ public class MarsRoverTests extends MarsRoverImages {
         Assert.assertEquals(ROVER_CONSTRUCTOR_MISMATCH_ERROR_MESSAGE,
                 494220, rover.getTotalPhotos());
     }
-
-    static String readFile(String path, Charset encoding) throws IOException {
-        byte[] encoded = Files.readAllBytes(Paths.get(path));
-        return new String(encoded, encoding);
-    }
 }

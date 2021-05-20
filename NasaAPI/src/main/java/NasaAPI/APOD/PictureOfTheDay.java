@@ -16,7 +16,7 @@ public class PictureOfTheDay {
     private final String title;
     private final String url;
 
-    PictureOfTheDay(JSONObject photoManifest) throws JSONException {
+    public PictureOfTheDay(JSONObject photoManifest) throws JSONException {
             this.date = photoManifest.getString("date");
             this.explanation = photoManifest.getString("explanation");
             this.mediaType = photoManifest.getString("media_type");
