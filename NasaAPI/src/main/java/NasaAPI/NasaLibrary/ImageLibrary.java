@@ -1,5 +1,6 @@
-package NasaAPI;
+package NasaAPI.NasaLibrary;
 
+import NasaAPI.Common;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import org.apache.logging.log4j.LogManager;
@@ -7,10 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import static NasaAPI.Common.downloadImages;
-import static NasaAPI.Common.formatStringWithSeparator;
-
-public class ImageLibrary {
+public class ImageLibrary extends Common {
 
     static final Logger log = LogManager.getLogger(ImageLibrary.class.getName());
 
@@ -18,13 +16,13 @@ public class ImageLibrary {
     private static final String NASA_LIBRARY_BASE_URL = "https://images-api.nasa.gov/search?";
 
 
-    static void getNasaLibraryImages(String[] q, String[] mediaType, String startYear, String endYear, String imagePath) {
+    public void getNasaLibraryImages(String[] q, String[] mediaType, String startYear, String endYear, String imagePath) {
         String[] url = getNasaLibraryDataUrl(q, mediaType, startYear, endYear);
 
         downloadImages(url,"wget -O", "NASA_", ".JPG", imagePath);
     }
 
-    private static String[] getNasaLibraryDataUrl(String[] q, String[] mediaType, String startYear, String endYear) {
+    private String[] getNasaLibraryDataUrl(String[] q, String[] mediaType, String startYear, String endYear) {
         log.debug("The start year is - {}", startYear);
         log.debug("The end year is - {}", endYear);
 

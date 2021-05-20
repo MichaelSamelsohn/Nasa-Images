@@ -1,5 +1,6 @@
-package NasaAPI.Mars;
+package NasaAPI.MarsRover;
 
+import NasaAPI.Common;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -10,37 +11,31 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static NasaAPI.Common.downloadImages;
-import static NasaAPI.Common.validateNumberInInterval;
 import static java.lang.System.exit;
 
-public class MarsRoverImages {
+public class MarsRoverImages extends Common {
 
     static final Logger log = LogManager.getLogger(MarsRoverImages.class.getName());
 
-    private static int numberOfPhotosToCollect = 1; // Default is 1.
+    private int numberOfPhotosToCollect = 1; // Default is 1.
     private static final String MARS_ROVER_PHOTOS_BASE_URL = "https://api.nasa.gov/mars-photos/api/v1/";
     private static final String API_KEY = "api_key=fymalkzvEUpMBhhBIpi39IQu0zqsjMy7K2AYhiwJ";
 
-    public static void getMarsRoverImages(@NotNull String roverName, int numOfImages, Object date, String imagePath) {
+    public void getMarsRoverImages(@NotNull String roverName, int numOfImages, Object date, String imagePath) {
         log.debug("The selected rover name is - {}", roverName);
         log.debug("The selected number of images is - {}", numOfImages);
         log.debug("The selected date is - {}", date);
         log.debug("The selected image path is - {}", imagePath);
 
-        if (numOfImages > 0) {
-            numberOfPhotosToCollect = numOfImages;
-        } else {
-            log.warn("Will use default value of photos to collect - 1, since provided number is lower thn 0");
-        }
+        numberOfPhotosToCollect = numberOfImagesToDownload(numOfImages);
 
-        Rover rover = getMarsRoverManifest(roverName);
-        String[] url = getMarsRoverImagesUrl(rover, date);
-
+        String[] url = getMarsRoverImagesUrl(getMarsRoverManifest(roverName), date);
         downloadImages(url,"wget -O", "MARS_", ".JPG", imagePath);
+
+        log.info("For full API documentation - https://api.nasa.gov/");
     }
 
-    protected static String[] getMarsRoverImagesUrl(Rover rover, Object date) {
+    protected String[] getMarsRoverImagesUrl(Rover rover, Object date) {
         String[] photosUrl = new String[numberOfPhotosToCollect];
         String urlComplement;
         String validatedDate;
@@ -82,7 +77,7 @@ public class MarsRoverImages {
         return photosUrl;
     }
 
-    protected static Rover getMarsRoverManifest(String roverName) {
+    protected Rover getMarsRoverManifest(String roverName) {
         String urlComplement = "manifests/" + roverName + "?" + API_KEY;
         log.debug("The URL complement is - {}", urlComplement);
         HttpResponse<String> response = null;
@@ -99,17 +94,11 @@ public class MarsRoverImages {
                         ("Bad rover name. The acceptable choices are - Curiosity, Opportunity and Spirit");
             }
 
-            log.debug("Extracting all the relevant information");
             JSONObject jsonManifest = new JSONObject(response.getBody());
-            JSONObject jsonPhotoManifest = jsonManifest.getJSONObject("photo_manifest");
+            JSONObject jsonRoverManifest = jsonManifest.getJSONObject("photo_manifest");
 
-            rover = new Rover(
-                    roverName,
-                    jsonPhotoManifest.getString("landing_date"),
-                    jsonPhotoManifest.getString("max_date"),
-                    jsonPhotoManifest.getInt("max_sol"),
-                    Boolean.getBoolean(jsonPhotoManifest.getString("status")),
-                    jsonPhotoManifest.getInt("total_photos"));
+            rover = new Rover(roverName, jsonRoverManifest);
+            rover.printInformation();
         } catch (JSONException | UnirestException e) {
             log.error("An error has occurred while conducting the manifest", e);
             e.printStackTrace();
@@ -119,7 +108,7 @@ public class MarsRoverImages {
         return rover;
     }
 
-    public static String checkEarthDate(String minDate, String maxDate, String date) {
+    public String checkEarthDate(String minDate, String maxDate, String date) {
         // maxDate - Latest date available for the particular rover.
         // minDate - Earliest date available for the particular rover.
         // date - Provided date.

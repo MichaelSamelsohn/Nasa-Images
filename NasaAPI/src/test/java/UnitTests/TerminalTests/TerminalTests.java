@@ -1,4 +1,4 @@
-package TerminalTests;
+package UnitTests.TerminalTests;
 
 import CMD.Terminal;
 import org.apache.logging.log4j.LogManager;

@@ -1,4 +1,4 @@
-package CommonMethodsTests;
+package IntegrationTests.CommonTests;
 
 import NasaAPI.Common;
 import org.apache.logging.log4j.LogManager;
@@ -10,16 +10,16 @@ import org.junit.rules.TemporaryFolder;
 
 import java.util.Arrays;
 
-public class CommonMethodsTests extends Common {
+public class CommonTests extends Common {
 
-    static final Logger log = LogManager.getLogger(CommonMethodsTests.class.getName());
+    static final Logger log = LogManager.getLogger(CommonTests.class.getName());
 
     private final String VALIDATE_NUMBER_IN_INTERVAL_ERROR_MESSAGE = "The returned value wasn't processed properly";
 
     @Rule
     public final TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    private final String[] URL = new String[] {
+    private static final String[] URL = new String[] {
             "http://mars.jpl.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/00136/opgs/edr/fcam/FLA_409555441EDR_F0051858FHAZ00311M_.JPG",
             "http://mars.jpl.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/00136/opgs/edr/rcam/RRA_409555466EDR_F0051858RHAZ00309M_.JPG",
             "http://mars.jpl.nasa.gov/msl-raw-images/msss/00136/mcam/0136ML0821000000I1_DXXX.jpg",
@@ -34,6 +34,7 @@ public class CommonMethodsTests extends Common {
         downloadImages(URL, "wget -O", "MARS_", ".JPG",
                 tempFolderPath);
         String[] fileList = temporaryFolder.getRoot().list();
+        assert fileList != null;
 
         log.debug("Asserting that temporary directory contains the exact amount of files as images that were downloaded");
         Assert.assertEquals("Not all images were downloaded", URL.length, fileList.length);
@@ -45,35 +46,5 @@ public class CommonMethodsTests extends Common {
             Assert.assertTrue("Format or naming convention isn't correct for one of the image files",
                     Arrays.asList(fileList).contains(imageFileNameAndFormat));
         }
-    }
-
-    @Test
-    public void correctFormattingOfStrings() {
-        String[] strings = new String[] {
-                "THIS",
-                "IS",
-                "A",
-                "TEST"
-        };
-        String separator = " "; // Whitespace.
-
-        log.debug("Asserting that the formatting is performed correctly");
-        Assert.assertEquals("The formatting didn't work as expected",
-                "THIS IS A TEST", formatStringWithSeparator(strings, separator));
-    }
-
-    @Test
-    public void validateNumberInIntervalOverMax() {
-        Assert.assertEquals(VALIDATE_NUMBER_IN_INTERVAL_ERROR_MESSAGE, 10, validateNumberInInterval(0, 10, 20));
-    }
-
-    @Test
-    public void validateNumberInIntervalBelowMin() {
-        Assert.assertEquals(VALIDATE_NUMBER_IN_INTERVAL_ERROR_MESSAGE, 0, validateNumberInInterval(0, 10, -20));
-    }
-
-    @Test
-    public void validateNumberInIntervalBetweenMinMax() {
-        Assert.assertEquals(VALIDATE_NUMBER_IN_INTERVAL_ERROR_MESSAGE, 5, validateNumberInInterval(0, 10, 5));
     }
 }

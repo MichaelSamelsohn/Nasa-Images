@@ -1,8 +1,8 @@
-package MarsRoversTests;
+package UnitTests.MarsRoverTests;
 
 
-import NasaAPI.Mars.MarsRoverImages;
-import NasaAPI.Mars.Rover;
+import NasaAPI.MarsRover.MarsRoverImages;
+import NasaAPI.MarsRover.Rover;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -16,9 +16,9 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RunWith(Parameterized.class)
-public class MarsRoverImagesManifestTest extends MarsRoverImages {
+public class MarsRoverManifestTest extends MarsRoverImages {
 
-    static final Logger log = LogManager.getLogger(MarsRoverImagesManifestTest.class.getName());
+    static final Logger log = LogManager.getLogger(MarsRoverManifestTest.class.getName());
 
     @Parameterized.Parameters(name = "Rover - {0}")
     public static Collection<Object[]> data() {
