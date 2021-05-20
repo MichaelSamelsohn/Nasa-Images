@@ -5,7 +5,6 @@ import NasaAPI.MarsRover.MarsRoverImages;
 import NasaAPI.MarsRover.Rover;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -13,8 +12,6 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.Mock;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -28,6 +25,8 @@ import static org.mockito.Mockito.when;
 public class MarsRoverTests extends MarsRoverImages {
 
     static final Logger log = LogManager.getLogger(MarsRoverTests.class.getName());
+
+    private final String ROVER_MANIFEST_JSON = System.getProperty("user.dir") + "/src/test/resources/CuriosityRoverManifest.json";
 
     private final String THROWN_EXCEPTION_ERROR_MESSAGE = "The thrown exception message doesn't match intended one";
     private final String CHECK_EARTH_DATE_ERROR_MESSAGE = "The returned value wasn't processed properly";
@@ -103,14 +102,14 @@ public class MarsRoverTests extends MarsRoverImages {
     }
 
     @Test
-    public void marsRoverConstructorExtractsCorrectInformation() throws IOException {
+    public void marsRoverConstructorExtractsCorrectInformation() {
+        // TODO: Add logs.
         Rover rover = null;
         try {
             JSONObject roverManifest =
-                    new JSONObject(readFile(System.getProperty("user.dir") + "/src/test/resources/CuriosityRoverManifest.json",
-                            Charset.defaultCharset()));
+                    new JSONObject(readFile(ROVER_MANIFEST_JSON, Charset.defaultCharset()));
             rover = new Rover("Curiosity" , roverManifest);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
