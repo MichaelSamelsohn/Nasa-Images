@@ -2,12 +2,13 @@ package UnitTests.ApodTests;
 
 import NasaAPI.APOD.APOD;
 import NasaAPI.APOD.PictureOfTheDay;
-import NasaAPI.MarsRover.Rover;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import java.nio.charset.Charset;
 
@@ -25,7 +26,7 @@ public class ApodTests extends APOD {
         PictureOfTheDay picture = null;
         try {
             JSONObject roverManifest =
-                    new JSONObject(readFile(APOD_20200517_JSON, Charset.defaultCharset()));
+                    new JSONObject(readFileAndReturnAsString(APOD_20200517_JSON, Charset.defaultCharset()));
             picture = new PictureOfTheDay(roverManifest);
         } catch (Exception e) {
             e.printStackTrace();

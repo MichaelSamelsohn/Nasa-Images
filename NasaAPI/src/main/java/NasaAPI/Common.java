@@ -4,6 +4,7 @@ import CMD.Terminal;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.VisibleForTesting;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -76,7 +77,8 @@ public class Common extends Terminal{
         return Math.min(Math.max(value, min), max);
     }
 
-    public String readFile(String path, Charset encoding) throws IOException {
+    @VisibleForTesting
+    public static String readFileAndReturnAsString(String path, Charset encoding) throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(path));
         return new String(encoded, encoding);
     }

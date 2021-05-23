@@ -5,17 +5,11 @@ import NasaAPI.MarsRover.MarsRoverImages;
 import NasaAPI.MarsRover.Rover;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.Mock;
-
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -26,11 +20,9 @@ public class MarsRoverTests extends MarsRoverImages {
 
     static final Logger log = LogManager.getLogger(MarsRoverTests.class.getName());
 
-    private final String ROVER_MANIFEST_JSON = System.getProperty("user.dir") + "/src/test/resources/CuriosityRoverManifest.json";
 
     private final String THROWN_EXCEPTION_ERROR_MESSAGE = "The thrown exception message doesn't match intended one";
     private final String CHECK_EARTH_DATE_ERROR_MESSAGE = "The returned value wasn't processed properly";
-    private final String ROVER_CONSTRUCTOR_MISMATCH_ERROR_MESSAGE = "The returned value doesn't match the information in the JSON file";
 
     @Mock
     Rover mockRover = mock(Rover.class);
@@ -99,31 +91,5 @@ public class MarsRoverTests extends MarsRoverImages {
         Assert.assertEquals(CHECK_EARTH_DATE_ERROR_MESSAGE,
                 MIDDLE_DATE,
                 checkEarthDate(MIN_DATE, MAX_DATE, MIDDLE_DATE));
-    }
-
-    @Test
-    public void marsRoverConstructorExtractsCorrectInformation() {
-        // TODO: Add logs.
-        Rover rover = null;
-        try {
-            JSONObject roverManifest =
-                    new JSONObject(readFile(ROVER_MANIFEST_JSON, Charset.defaultCharset()));
-            rover = new Rover("Curiosity" , roverManifest);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        assert rover != null;
-        Assert.assertEquals(ROVER_CONSTRUCTOR_MISMATCH_ERROR_MESSAGE,
-                "Curiosity", rover.getName());
-        Assert.assertEquals(ROVER_CONSTRUCTOR_MISMATCH_ERROR_MESSAGE,
-                "2012-08-06", rover.getLandingDate());
-        Assert.assertEquals(ROVER_CONSTRUCTOR_MISMATCH_ERROR_MESSAGE,
-                "2021-05-18", rover.getMaxDate());
-        Assert.assertEquals(ROVER_CONSTRUCTOR_MISMATCH_ERROR_MESSAGE,
-                3122, rover.getMaxSol());
-        Assert.assertTrue(ROVER_CONSTRUCTOR_MISMATCH_ERROR_MESSAGE, rover.isActive());
-        Assert.assertEquals(ROVER_CONSTRUCTOR_MISMATCH_ERROR_MESSAGE,
-                494220, rover.getTotalPhotos());
     }
 }
